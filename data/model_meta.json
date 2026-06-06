@@ -1,0 +1,19 @@
+{
+  "model_name": "Random Forest",
+  "best_params": "{'model__max_depth': None, 'model__min_samples_leaf': 1, 'model__n_estimators': 200}",
+  "test_r2": 0.9703,
+  "test_rmse_aed": 926454.0,
+  "test_mae_aed": 271880.0,
+  "numerical_features": [
+    "area_sqft",
+    "bedrooms",
+    "bathrooms",
+    "is_luxury"
+  ],
+  "categorical_features": [
+    "location",
+    "property_type",
+    "furnished",
+    "bedroom_bucket"
+  ]
+}
