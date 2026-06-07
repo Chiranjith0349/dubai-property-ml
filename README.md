@@ -6,7 +6,7 @@
 ---
 
 ## Live Demo
-🔗 *[Add your Streamlit Cloud link here after deployment]*
+🔗 [dubai-property-ml.streamlit.app](https://dubai-property-ml-nqcgjvbkvsum8akhzmhd23.streamlit.app/)
 
 ---
 
