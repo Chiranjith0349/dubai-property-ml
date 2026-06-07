@@ -7,7 +7,7 @@ This project uses a public Dubai property listings dataset available on Kaggle.
 ### Steps
 
 1. Go to Kaggle and search: **"dubai real estate listings"** or **"dubai properties"**
-   - One option: https://www.kaggle.com/datasets/azharsaleem/real-estate-gold-mine-in-uae-bayut-com
+   - One option: https://www.kaggle.com/datasets/thapasajan/dubai-real-estate-property-listings?select=uae-housing_dataset.csv
 
 2. Download the CSV file
 
