@@ -1,7 +1,7 @@
 # Dubai Property Price Intelligence
 
 > Price prediction model for Dubai real estate, trained on ~5,000 property listings scraped from local portals.
-> Full pipeline from raw CSV to a live Streamlit dashboard — SQLite data layer, EDA, feature engineering, model comparison, and hyperparameter tuning.
+> Full pipeline from raw CSV to a live Streamlit dashboard - SQLite data layer, EDA, feature engineering, model comparison, and hyperparameter tuning.
 
 ---
 
