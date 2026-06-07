@@ -1,34 +1,33 @@
 # Dataset Download Instructions
 
-## Dataset: Dubai Properties (Bayut Listings)
+## Dataset: Dubai Real Estate Listings
 
-This project uses a Dubai real estate listings dataset scraped from Bayut.com — 
-the exact platform you're applying to. Using their own data is a strong talking point.
+This project uses a public Dubai property listings dataset available on Kaggle.
 
 ### Steps
 
-1. Go to Kaggle and search: **"dubai properties bayut"**
-   - Direct link option 1: https://www.kaggle.com/datasets/azharsaleem/real-estate-gold-mine-in-uae-bayut-com
-   - Direct link option 2: Search "dubai real estate listings" and pick the largest dataset
+1. Go to Kaggle and search: **"dubai real estate listings"** or **"dubai properties"**
+   - One option: https://www.kaggle.com/datasets/azharsaleem/real-estate-gold-mine-in-uae-bayut-com
 
-2. Download the CSV file(s)
+2. Download the CSV file
 
-3. Rename the main file to **`properties.csv`** and place it in this `/data/` folder
+3. Rename it to **`properties.csv`** and place it in this `/data/` folder
 
-4. Open `src/database.py` and update `COLUMN_MAP` at the top to match your 
-   CSV's actual column names (instructions are in the file)
+4. Open `src/database.py` and check that `COLUMN_MAP` matches your CSV's column names
+   (the comments in the file explain what each key maps to)
 
 ### Expected columns (adjust if yours differ)
-The code expects these concepts — column names may vary by dataset:
+
+The code expects these concepts — column names vary by dataset:
 
 | Concept | Common column names |
 |---|---|
 | Price (AED) | `price`, `Price`, `sale_price` |
-| Area (sqft) | `area_in_sqft`, `area`, `size` |
-| Bedrooms | `bedrooms`, `beds`, `Bedrooms` |
-| Bathrooms | `bathrooms`, `baths` |
-| Location/Area | `location`, `neighborhood`, `area_name` |
-| Property type | `type`, `property_type`, `Type` |
+| Area (sqft) | `area_in_sqft`, `area(sqft)`, `size` |
+| Bedrooms | `bedrooms`, `bedroom`, `beds` |
+| Bathrooms | `bathrooms`, `bathroom`, `baths` |
+| Location | `location`, `address`, `neighborhood` |
+| Property type | `property_type`, `propert_type`, `type` |
 | Furnished | `furnishing`, `furnished` |
 | Purpose | `purpose`, `rent_or_buy` |
 

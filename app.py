@@ -56,7 +56,7 @@ meta  = load_meta()
 # ── Header ─────────────────────────────────────────────────────────────────────
 st.title("🏙️ Dubai Property Price Intelligence")
 st.markdown(
-    "**ML-powered price prediction** for Dubai real estate — built on Bayut listing data."
+    "**ML-powered price prediction** for Dubai real estate — trained on ~5,000 public property listings."
 )
 
 if model is None:
@@ -245,7 +245,7 @@ with tab_methodology:
 
     st.markdown("""
     ### Data Pipeline
-    Raw Bayut listing data (CSV) → **SQLite database** → pandas DataFrame → ML model.
+    Raw CSV → **SQLite database** → pandas DataFrame → ML model.
     All data pulls go through named SQL queries — no raw CSV reads in the ML code.
 
     ### Feature Engineering
