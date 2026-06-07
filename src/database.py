@@ -2,12 +2,11 @@
 database.py
 -----------
 Loads the Dubai properties CSV into a local SQLite database and exposes
-SQL-based query functions that feed the ML pipeline.
+named SQL query functions used by both the EDA notebook and the ML pipeline.
 
-WHY SQLite first?
-  The JD specifically asks for "query large datasets with SQL and feed ML models."
-  This layer makes that skill explicit and auditable — every data pull in the
-  notebooks comes through a SQL query, not a raw pd.read_csv().
+All data pulls go through SQL queries rather than reading the CSV directly —
+this keeps the data layer consistent and makes it easy to swap in a real
+database later without touching the notebook code.
 """
 
 import re
@@ -121,8 +120,6 @@ def run_query(sql: str) -> pd.DataFrame:
 
 
 # ── Named SQL queries ──────────────────────────────────────────────────────────
-# Each function answers a specific business question.
-# This pattern is what data teams actually do — named, reusable queries.
 
 def q_overview() -> pd.DataFrame:
     """High-level counts and price statistics for a quick sanity check."""
@@ -204,9 +201,8 @@ def q_furnished_premium() -> pd.DataFrame:
 
 def q_price_per_sqft_outliers() -> pd.DataFrame:
     """
-    Identify listings where price/sqft is implausibly low or high.
-    These are likely data errors — we'll filter them before modelling.
-    WHY: Outliers in the target variable distort regression models badly.
+    Listings where price/sqft is implausibly low or high — likely data errors.
+    Used during EDA to decide the outlier filter thresholds before modelling.
     """
     return run_query("""
         SELECT

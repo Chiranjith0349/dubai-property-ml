@@ -1,21 +1,16 @@
 # %% [markdown]
-# # Dubai Property Price Prediction — ML Model Development
+# # Dubai Property Price Prediction — Model Development
 #
-# **Goal:** Train, evaluate, and tune multiple regression models to predict
-# property sale prices in Dubai (AED). We follow a structured ML workflow:
+# Train and compare three regression models, tune the best one, and save the
+# final pipeline for the Streamlit app. Steps:
 #   1. Feature engineering
-#   2. Preprocessing pipeline
-#   3. Baseline model (Linear Regression)
-#   4. Ensemble models (Random Forest, Gradient Boosting)
-#   5. Cross-validated model comparison
-#   6. Hyperparameter tuning on the best model
-#   7. Final evaluation & feature importance
-#   8. Save best model for the Streamlit app
-#
-# **JD alignment:**
-# - "Utilize Python code for analyzing data and building statistical models"
-# - "Evaluate ML models and fine tune model parameters"
-# - "Query large datasets with SQL and feed ML models"
+#   2. Preprocessing pipeline (no data leakage)
+#   3. Baseline — Ridge Regression
+#   4. Ensembles — Random Forest, Gradient Boosting
+#   5. 5-fold CV model comparison
+#   6. GridSearchCV hyperparameter tuning
+#   7. Residuals + feature importance
+#   8. Save model with joblib
 
 # %% — Imports
 import sys
@@ -51,9 +46,6 @@ print(df_raw.head())
 
 # %% [markdown]
 # ## Step 2 — Feature engineering
-#
-# Good features matter more than fancy models. We create domain-specific
-# features that a property analyst would recognise as meaningful.
 
 # %%
 df = df_raw.copy()
@@ -114,9 +106,8 @@ print(f"Train: {X_train.shape[0]:,}  |  Test: {X_test.shape[0]:,}")
 # %% [markdown]
 # ## Step 4 — Preprocessing pipeline
 #
-# We use scikit-learn's Pipeline + ColumnTransformer to ensure:
-# 1. No data leakage (transformations are fit on train, applied to test)
-# 2. The exact same preprocessing runs in production (Streamlit app)
+# Pipeline + ColumnTransformer: fit on train, applied to test.
+# Same object gets serialised and used in the Streamlit app — no drift.
 
 # %%
 numerical_transformer = StandardScaler()
@@ -137,13 +128,10 @@ preprocessor = ColumnTransformer(
 # %% [markdown]
 # ## Step 5 — Define models
 #
-# **Why three models?**
-# - **Ridge Regression**: Interpretable baseline with regularisation.
-#   Shows whether the problem is linearly separable at all.
-# - **Random Forest**: Ensemble of decision trees. Handles non-linearity
-#   and feature interactions without explicit feature engineering.
-# - **Gradient Boosting**: Sequential boosting — typically the best performer
-#   on tabular data. Industry standard for structured property data.
+# Three models with increasing complexity:
+# - **Ridge**: regularised linear baseline — tells us if the problem is roughly linear
+# - **Random Forest**: handles non-linearity, robust to noisy features
+# - **Gradient Boosting**: sequential trees — usually wins on tabular data, worth comparing
 
 # %%
 models = {
@@ -245,9 +233,8 @@ plt.show()
 # %% [markdown]
 # ## Step 8 — Hyperparameter tuning (GridSearchCV on best model)
 #
-# We tune the best-performing model. GridSearchCV performs exhaustive search
-# over a parameter grid with cross-validation — this is what the JD means by
-# "fine tune model parameters considering the business problem behind."
+# Exhaustive grid search with 5-fold CV on the best model from Step 6.
+# Tuning n_estimators, max_depth, and learning rate depending on the model type.
 
 # %%
 # Identify best model by R²
@@ -332,8 +319,8 @@ plt.show()
 # %% [markdown]
 # ## Step 10 — Feature importance
 #
-# Which features drive price predictions? This is the kind of insight the
-# Bayut BI team would present to product and business stakeholders.
+# Which features are actually doing the work? Useful for understanding the model
+# and for deciding whether any features are worth dropping or adding.
 
 # %%
 best_pipeline = grid.best_estimator_
@@ -370,9 +357,6 @@ else:
 
 # %% [markdown]
 # ## Step 11 — Save the best model
-#
-# Serialize the full pipeline (preprocessor + model) so the Streamlit
-# app and any production system can load it without re-training.
 
 # %%
 MODEL_PATH = Path("data/best_model.joblib")
@@ -401,11 +385,12 @@ print(json.dumps(meta, indent=2))
 #
 # | Model | Test R² | Test RMSE (AED) |
 # |---|---|---|
-# | Ridge Regression | baseline | baseline |
-# | Random Forest | better | better |
-# | Gradient Boosting (tuned) | **best** | **lowest** |
+# | Ridge Regression | 0.929 | 4,438,793 |
+# | Gradient Boosting | 0.949 | 1,338,070 |
+# | **Random Forest (tuned)** | **0.970** | **930,937** |
 #
-# The tuned Gradient Boosting model is saved and ready for the Streamlit
-# prediction app. Key drivers: area_sqft, location, and bedroom count.
+# Random Forest won — not unusual on a ~5K dataset where boosting tends to
+# overfit noise. Model saved to data/best_model.joblib.
+# Key drivers: area_sqft, location, bedroom count.
 
 # %%

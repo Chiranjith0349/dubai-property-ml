@@ -1,26 +1,12 @@
 # Dubai Property Price Intelligence
 
-> End-to-end ML project predicting Dubai real estate sale prices using Bayut listing data.
-> Covers the full data science lifecycle: SQL → EDA → feature engineering → model training → hyperparameter tuning → live Streamlit dashboard.
+> Price prediction model for Dubai real estate, trained on ~5,000 property listings scraped from local portals.
+> Full pipeline from raw CSV to a live Streamlit dashboard — SQLite data layer, EDA, feature engineering, model comparison, and hyperparameter tuning.
 
 ---
 
 ## Live Demo
 🔗 [dubai-property-ml.streamlit.app](https://dubai-property-ml-nqcgjvbkvsum8akhzmhd23.streamlit.app/)
-
----
-
-## Project Motivation
-
-Bayut & dubizzle is the UAE's largest property listings platform. This project
-uses their listing data to build a price prediction model — demonstrating the
-exact skills required for Bayut's ML Intern role:
-
-- Querying large datasets with SQL and feeding ML models
-- Data exploration and quality assessment
-- Building and evaluating statistical models in Python
-- Hyperparameter tuning with cross-validation
-- Building a customer-facing reporting tool (Streamlit dashboard)
 
 ---
 
@@ -30,9 +16,9 @@ exact skills required for Bayut's ML Intern role:
 dubai-property-ml/
 ├── data/
 │   ├── DOWNLOAD_INSTRUCTIONS.md   # How to get the dataset
-│   ├── properties.csv             # Raw data (not committed to git)
-│   ├── properties.db              # SQLite database (auto-generated)
-│   ├── best_model.joblib          # Trained model (auto-generated)
+│   ├── properties.csv             # Raw data
+│   ├── properties.db              # SQLite database (auto-generated, gitignored)
+│   ├── best_model.joblib          # Trained model
 │   ├── model_meta.json            # Model performance metadata
 │   └── plot_*.png                 # EDA charts (auto-generated)
 ├── src/
@@ -80,9 +66,9 @@ streamlit run app.py
 ## Methodology
 
 ### Data layer (SQL)
-All data is loaded into SQLite via `src/database.py`. Every pull into pandas
-goes through a named SQL query — mirroring how real BI teams work with
-data warehouses. This ensures the SQL → ML handoff is explicit and auditable.
+The raw CSV is loaded into SQLite via `src/database.py`. Every data pull into
+pandas goes through a named SQL query rather than reading the CSV directly —
+makes it easy to swap to a real database and keeps the data layer reusable.
 
 ### Exploratory Data Analysis
 - Target distribution: highly right-skewed → log-transform applied
@@ -119,9 +105,9 @@ data warehouses. This ensures the SQL → ML handoff is explicit and auditable.
 - Residuals analysis confirms no systematic bias
 
 ### Deployment
-Full sklearn Pipeline (`ColumnTransformer` → `GradientBoostingRegressor`) is
-serialised with `joblib`. The Streamlit app loads it once and calls
-`model.predict(input_df)` — no preprocessing mismatch is possible.
+The full sklearn Pipeline (preprocessor + model) is serialised with `joblib`.
+The Streamlit app loads it once at startup and calls `model.predict(input_df)` —
+the same object that was trained, so there's no preprocessing mismatch.
 
 ---
 
@@ -137,11 +123,9 @@ Random Forest outperformed Gradient Boosting on this dataset — common with ~5K
 
 ---
 
-## Skills Demonstrated
+## Tech Stack
 
-`Python` · `SQL / SQLite` · `pandas` · `numpy` · `scikit-learn` · `Gradient Boosting` ·
-`GridSearchCV` · `Cross-validation` · `Feature Engineering` · `Streamlit` · `Plotly` ·
-`Data Cleaning` · `Statistical Modelling` · `ML in Production`
+`Python` · `SQL / SQLite` · `pandas` · `numpy` · `scikit-learn` · `Streamlit` · `Plotly`
 
 ---
 

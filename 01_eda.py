@@ -1,15 +1,10 @@
 # %% [markdown]
 # # Dubai Property Market — Exploratory Data Analysis
 #
-# **Business context:** Bayut & dubizzle is the UAE's largest property listings
-# platform. Before building any ML model, we need to deeply understand the data:
-# its quality, distributions, and the relationships between features and price.
-# Bad EDA → bad models. This notebook covers the full data exploration lifecycle.
-#
-# **JD alignment:**
-# - "Perform data exploration to find patterns in the data"
-# - "Understand the state and quality of the data available"
-# - "Query large datasets with SQL"
+# Before training anything, I want to understand what the data actually looks like:
+# price distribution, which features correlate with price, where the dirty records
+# are, and what needs cleaning or transforming before modelling.
+# Bad EDA → bad models.
 
 # %% — Imports & setup
 import sys
@@ -47,9 +42,9 @@ def fmt_aed(x, pos=None):
 # %% [markdown]
 # ## Step 1 — Load data into SQLite
 #
-# We load the raw CSV into a local SQLite database. Every data pull from here
-# onwards goes through a SQL query — not raw pandas. This mirrors how real
-# BI/ML teams work with data warehouses.
+# Load the raw CSV into SQLite so every subsequent pull goes through a SQL query.
+# This makes it easier to swap the data source later and keeps the data layer
+# separate from the analysis code.
 
 # %%
 load_csv_to_db()  # Safe to re-run; replaces table each time
@@ -239,8 +234,6 @@ print(furn_df.to_string(index=False))
 
 # %% [markdown]
 # ## Step 12 — Key EDA takeaways
-#
-# Document findings here — this is what you'd present to the BI team.
 
 # %%
 print("""
